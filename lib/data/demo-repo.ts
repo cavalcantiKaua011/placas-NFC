@@ -263,6 +263,14 @@ export class DemoRepo implements Repo {
     return p ? this.detalhe(p) : null;
   }
 
+  async obterPorIds(ids: string[]) {
+    const set = new Set(ids);
+    return this.db.plaquinhas
+      .filter((p) => set.has(p.id))
+      .map((p) => this.item(p))
+      .sort((a, b) => a.codigo.localeCompare(b.codigo, 'pt-BR', { numeric: true }));
+  }
+
   async buscarPorCodigo(codigo: string) {
     const c = codigo.toUpperCase();
     const p = this.db.plaquinhas.find((x) => x.codigo_publico === c || x.codigo === c);

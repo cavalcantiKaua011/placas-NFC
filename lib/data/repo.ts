@@ -30,6 +30,8 @@ export interface Repo {
 
   listarPlaquinhas(f: FiltroPlaquinhas): Promise<{ itens: PlaquinhaItem[]; total: number }>;
   obterPlaquinha(id: string): Promise<PlaquinhaDetalhe | null>;
+  /** Várias plaquinhas por id (ordem: etiqueta interna). Ids inexistentes são ignorados. */
+  obterPorIds(ids: string[]): Promise<PlaquinhaItem[]>;
   buscarPorCodigo(codigo: string): Promise<PlaquinhaDetalhe | null>;
   criarPlaquinhas(quantidade: number, siteUrl: string): Promise<PlaquinhaItem[]>;
   importarCodigos(codigos: string[], siteUrl: string): Promise<{ criadas: string[]; existentes: string[] }>;

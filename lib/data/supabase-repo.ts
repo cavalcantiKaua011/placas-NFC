@@ -114,6 +114,17 @@ export class SupabaseRepo implements Repo {
     return this.detalhe('id', id);
   }
 
+  async obterPorIds(ids: string[]) {
+    const unicos = Array.from(new Set(ids));
+    const out: PlaquinhaItem[] = [];
+    for (let i = 0; i < unicos.length; i += 100) {
+      const { data, error } = await this.db.from('vw_plaquinhas').select('*').in('id', unicos.slice(i, i + 100));
+      if (error) falha(error, 'carregar plaquinhas');
+      out.push(...(data ?? []).map(mapPlaquinha));
+    }
+    return out.sort((a, b) => a.codigo.localeCompare(b.codigo, 'pt-BR', { numeric: true }));
+  }
+
   async buscarPorCodigo(codigo: string) {
     return (await this.detalhe('codigo_publico', codigo)) ?? (await this.detalhe('codigo', codigo));
   }

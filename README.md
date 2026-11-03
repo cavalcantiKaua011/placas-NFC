@@ -162,7 +162,33 @@ A chave `service_role` **não** é usada. Não a cadastre em lugar nenhum deste 
 2. Variáveis: apenas `DEMO_MODE=true` (sem chaves do Supabase).
 3. Deploy → a URL `placas-nfc-demo.vercel.app` mostra o site e o botão "Entrar na demonstração".
 
-## 8. Checklist de validação manual (após configurar o Supabase)
+## 8. PowerPoint para impressão
+
+Em **Minhas Plaquinhas**, marque as plaquinhas (ou use "Todas do filtro atual") e clique em
+**Gerar PowerPoint para Impressão**. Escolha **Todas as artes** (6 variações, mesmo QR em todas) ou
+**Escolher artes**. A tela mostra plaquinhas, modelos, unidades e slides antes de gerar.
+
+| Item | Valor |
+|---|---|
+| Slide | 50,8 × 28,575 cm (o mesmo do PowerPoint de produção) |
+| Grade | 4 colunas × 2 linhas = 8 por slide, um modelo de arte por slide |
+| Cartão | 12 × 12 cm (a arte original mede 11,75 cm e é ampliada 2,15% sem alterar o desenho) |
+| QR Code | 3 × 3 cm, centralizado na área das cantoneiras; PNG ~1200 px, preto puro em branco, margem de 2 módulos |
+| Conteúdo do QR | `NEXT_PUBLIC_SITE_URL/r/CODIGO_PUBLICO` (o código já existente; nada é criado ou alterado) |
+
+Como funciona: as 6 artes foram extraídas **do próprio PowerPoint de produção**
+(`assets/pptx/referencia-producao.pptx`, slide 1) por `scripts/extrair-modelo-pptx.py`, que gera
+`lib/pptx/modelo.generated.ts`. O gerador (`lib/pptx/gerar.ts`, com JSZip) copia as formas, textos e imagens
+originais, posiciona na grade e insere o QR. Em produção é obrigatório definir `NEXT_PUBLIC_SITE_URL`.
+
+**Se as artes mudarem:** atualize o slide 1 do PowerPoint de referência (6 artes sem QR, mesma ordem:
+Google azul, Google preto, Instagram colorido, Instagram preto, WhatsApp verde, WhatsApp preto) e rode
+`python3 scripts/extrair-modelo-pptx.py` (requer `pip install lxml`).
+
+As fontes das artes (Montserrat, Grand Hotel) precisam estar instaladas no computador que abrir/imprimir o arquivo,
+como já acontece com o PowerPoint atual.
+
+## 9. Checklist de validação manual (após configurar o Supabase)
 
 1. Abrir `/` sem login → página pública, sem dados reais.
 2. Abrir `/painel` sem login → vai para `/login`.
